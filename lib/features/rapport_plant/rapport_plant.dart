@@ -11,11 +11,9 @@ import 'package:happytree/features/rapport_plant/api.dart';
 import 'package:happytree/response/planthistoriesresponse.dart';
 import 'package:happytree/response/planthistoryresponse.dart';
 import 'package:happytree/response/plantresponse.dart';
-import 'package:happytree/response/plantsresponse.dart';
 import 'package:happytree/util/util.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-import '../../components/design/custom_slider.dart';
 import '../../components/design/design.dart';
 import '../create/create.dart';
 
@@ -54,10 +52,10 @@ class RapportPlantState extends State<RapportPlant> {
       ),
       child: Column(
           children: [
-      Padding(padding: EdgeInsets.only(top : 10,left: 10,bottom: 10), child:  Align(child: Text(title, style: TextStyle(color: APPCOLOR, fontSize: 25),textAlign: TextAlign.start), alignment: Alignment.centerLeft),),
+            Padding(padding: EdgeInsets.only(top : 10,left: 10,bottom: 10), child:  Align(child: Text(title, style: TextStyle(color: APPCOLOR, fontSize: 25),textAlign: TextAlign.start), alignment: Alignment.centerLeft),),
             child,
             SizedBox(height: 20,)
-    ]),);
+          ]),);
 
   }
 
@@ -75,9 +73,9 @@ class RapportPlantState extends State<RapportPlant> {
             DateTime.fromMillisecondsSinceEpoch(int.parse(response.histories![0].sample_time!)).day.toString()
                 +"/"+
                 DateTime.fromMillisecondsSinceEpoch(int.parse(response.histories![0].sample_time!)).month.toString()+" "+
-            DateTime.fromMillisecondsSinceEpoch(int.parse(response.histories![0].sample_time!)).hour.toString()
-            +":"+
-            DateTime.fromMillisecondsSinceEpoch(int.parse(response.histories![0].sample_time!)).minute.toString(),
+                DateTime.fromMillisecondsSinceEpoch(int.parse(response.histories![0].sample_time!)).hour.toString()
+                +":"+
+                DateTime.fromMillisecondsSinceEpoch(int.parse(response.histories![0].sample_time!)).minute.toString(),
             style: style);
         break;
 
@@ -173,8 +171,8 @@ class RapportPlantState extends State<RapportPlant> {
             ),
             minX: 0,
             maxX: 16,
-            maxY: 90,
-            minY: 10,
+            maxY: 110,
+            minY: 0,
             lineBarsData: <LineChartBarData>[
               LineChartBarData(  isCurved: true,
                 color: Colors.redAccent,
@@ -183,7 +181,7 @@ class RapportPlantState extends State<RapportPlant> {
                 dotData: FlDotData(show: true),
                 belowBarData: BarAreaData(show: false),
                 spots: [
-                  FlSpot(1, double.parse(response.histories![0].device_data!.temperature! )),
+                  FlSpot(1, double.parse(response.histories![0].device_data!.temperature ?? "0.00" )),
                   FlSpot(4, double.parse(response.histories![1].device_data!.temperature! )),
                   FlSpot(6, double.parse(response.histories![2].device_data!.temperature! )),
                   FlSpot(8, double.parse(response.histories![3].device_data!.temperature! )),
@@ -250,7 +248,6 @@ class RapportPlantState extends State<RapportPlant> {
                   FutureBuilder(
                     future: getPlantHistoryById("1") ,
                     builder: (context, AsyncSnapshot<PlantHistoryResponse> snapshot) {
-                      // log(snapshot.data?.payload.sample_time ?? "test");
                       return   Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -274,18 +271,13 @@ class RapportPlantState extends State<RapportPlant> {
                     },
                   )
                   ,"Etat actuel")),
-              // Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:     cardElem(
-              //    ,
-              //     "Historique")),
+
               FutureBuilder(
                 future: getPlantHistoriesById("1"),
                 builder: (context, AsyncSnapshot<PlantsHistoriesResponse> snapshop2) {
                   if(snapshop2.connectionState == ConnectionState.done){
                     response = snapshop2.data!;
 
-                    // setState(() {
-                    //
-                    // });
                     return graph(snapshop2.data!);
                   }
                   else{
@@ -318,9 +310,7 @@ class RapportPlantState extends State<RapportPlant> {
                       "Température idéale")),
 
 
-              // Padding(padding: EdgeInsets.only(top: 40, bottom: 0), child:     cardElem(
-              //     ListTile(leading: Container(child: Image.asset("asset/icons/degree.png",width: 40, height: 40,)), title: Text("5°C"), subtitle: Text("Température de survie la plus faible en pot"),),
-              //     "Zone de rusticité")),
+
 
               Padding(padding: EdgeInsets.only(top: 40, bottom: 10),
                   child:     cardElem(
@@ -328,17 +318,8 @@ class RapportPlantState extends State<RapportPlant> {
                         child:   Column(
 
                           children:  [
-                            // Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Align(child: Text("Intérieur"),alignment: Alignment.centerLeft,),),
 
                             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text("Jan"),Text("Jui"),Text("Dec"),],),
-                            // ElevatedButton(
-                            //
-                            //     style: BaseButtonRoundedColorBorder(600, 30, APPCOLOR3, 25.0),
-                            //     onPressed: ()  {
-                            //
-                            //     }, child: Text("Année compl.", style: TextStyle(color: Colors.black),)),
-                            // Padding(padding: EdgeInsets.only(top: 10, bottom: 10), child: Align(child: Text("Extérieur"),alignment: Alignment.centerLeft,),),
-                            // Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [Text("Jan"),Text("Jui"),Text("Dec"),],),
                             SfSliderTheme(
                               data:  SfSliderThemeData(
                                 activeDividerColor: Colors.red,
@@ -360,14 +341,11 @@ class RapportPlantState extends State<RapportPlant> {
 
                               ),
                               child : SfSlider(
-                                // enableTooltip: true,
                                   showDividers: true,
 
 
-                                  // thumbShape: SfThumbShapeCustom(),
                                   thumbIcon: Align( child : Container( width: 250, height : 30,decoration: BoxDecoration(borderRadius: BorderRadius.circular(25), color: APPCOLOR3),child : Center(child: Text(snapshot.data?.payload.periode??"",style :TextStyle(color:  Colors.black),textAlign: TextAlign.center,)))),
-                                  // dividerShape:  DividerShapeCustom(),
-                                  // activeColor: Colors.red,
+
                                   value: 15,
                                   onChanged: (value){
                                   }, interval: 5, min : 0, max : 30),
@@ -401,7 +379,7 @@ class RapportPlantState extends State<RapportPlant> {
         else{
           return Center(child: CircularProgressIndicator(color: APPCOLOR,));
         }
-    },);
+      },);
   }
 
   @override
